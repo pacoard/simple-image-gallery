@@ -1,0 +1,6 @@
+src/app/*.js
+src/app/*.js.map
+node_modules/
+*.log
+backend/node_modules
+backend/image/*
