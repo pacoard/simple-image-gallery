@@ -35,7 +35,7 @@ var DB_NAME = 'imagesdb';
 // DB Initialization //
 ///////////////////////
 var mysql = require('mysql'); //Database management
-var dbConnection = mysql.createConnection({
+/*var dbConnection = mysql.createConnection({
   host     : DB_HOST,
   user     : DB_USERNAME,
   password : DB_PASSWORD,
@@ -50,7 +50,7 @@ dbConnection.query(sql, function (err, result) {
     return;
   }
   console.log("Result: " + result);
-});
+});*/
 //Update dbConnection to automatically connect to the created DB
 dbConnection = mysql.createConnection({
   host     : DB_HOST,
@@ -75,7 +75,6 @@ dbConnection.query(sql, function (err, result) {
   console.log("Result: " + result);
 });
 
-
 ////////////////////////////////////////////////////
 // Middlewares and functions to be called in POST //
 ////////////////////////////////////////////////////
@@ -92,7 +91,6 @@ var upload = multer({
       crypto.pseudoRandomBytes(16, function (err, raw) {
         fileName = raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype);
         cb(null, fileName);
-        uploadToS3(S3_BUCKET_NAME,fileName,null);
       });
     }
     })
@@ -111,7 +109,7 @@ function uploadToS3(bucket, filename, callback) {
           ACL: 'public-read'
         },
         function (resp) {
-          console.dir(resp);
+          if(res) console.dir(resp);
           console.log('Successfully uploaded package.');
           if (callback) {callback();}
         }
@@ -134,6 +132,7 @@ function bwTransformation(req,res,next) {
     } 
     else {
       console.log("Image processed: " + req.file.originalname);
+      uploadToS3(S3_BUCKET_NAME,fileName,null);
       uploadToS3('post-'+S3_BUCKET_NAME, 'bw_'+fileName,next);
     }
   });
