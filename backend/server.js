@@ -22,6 +22,7 @@ var S3_BUCKET_NAME = process.env.S3_BUCKET;
 var DB_HOST = process.env.RDS_HOST; 
 var DB_USERNAME = process.env.RDS_USERNAME
 var DB_PASSWORD = process.env.RDS_PASSWORD;
+
 /*
 var S3_BUCKET_NAME = 'sample bucket';
 var DB_HOST = 'sample host';
@@ -109,7 +110,7 @@ function uploadToS3(bucket, filename, callback) {
           ACL: 'public-read'
         },
         function (resp) {
-          if(res) console.dir(resp);
+          //if(res) console.dir(resp);
           console.log('Successfully uploaded package.');
           if (callback) {callback();}
         }
