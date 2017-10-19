@@ -1,7 +1,8 @@
 <h2>Image gallery</h2>
+<p> If you don't see your images right away, just refresh the page. It takes time to upload your images to the cloud! </p>
 <ul class="images">
 	<li *ngFor="let image of images" class="col-md-1">
-		<span class="badge">{{image.id}}</span> {{image.name}}; {{image.email}}
+		<span class="badge">{{image.id}}</span>Phone: {{image.phone}}; Email: {{image.email}}; Images (bw and raw):
 		<img style="width:50px;height:50px;"src="{{image.bwpath}}"/>
 		<img style="width:150px;height:150px;"src="{{image.path}}"/>
 	</li>

@@ -22,36 +22,18 @@ var S3_BUCKET_NAME = process.env.S3_BUCKET;
 var DB_HOST = process.env.RDS_HOST; 
 var DB_USERNAME = process.env.RDS_USERNAME
 var DB_PASSWORD = process.env.RDS_PASSWORD;
-
-/*
+/* //For local testing
 var S3_BUCKET_NAME = 'sample bucket';
 var DB_HOST = 'sample host';
 var DB_USERNAME = 'paco';
 var DB_PASSWORD = 'sample pass';
 */
-
 var DB_PORT = '8000';
 var DB_NAME = 'imagesdb'; 
 ///////////////////////
 // DB Initialization //
 ///////////////////////
-var mysql = require('mysql'); //Database management
-/*var dbConnection = mysql.createConnection({
-  host     : DB_HOST,
-  user     : DB_USERNAME,
-  password : DB_PASSWORD,
-  port     : DB_PORT
-});
-sql = 'CREATE DATABASE ' + DB_NAME;
-dbConnection.query(sql, function (err, result) {
-  console.log(sql);
-  if (err) {
-    //throw err;
-    console.log('Error: ' + err);
-    return;
-  }
-  console.log("Result: " + result);
-});*/
+var mysql = require('mysql'); 
 //Update dbConnection to automatically connect to the created DB
 dbConnection = mysql.createConnection({
   host     : DB_HOST,
@@ -62,10 +44,12 @@ dbConnection = mysql.createConnection({
 });
 sql = 'CREATE TABLE images (\
         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
-        name VARCHAR(255),\
-        email VARCHAR(255),\
+        email VARCHAR(32),\
+        phone VARCHAR(32),\
         url VARCHAR(255),\
-        bwurl VARCHAR(255))';
+        bwurl VARCHAR(255),\
+        status INT(1),\
+        receipt VARCHAR(255))';
 dbConnection.query(sql, function (err, result) {
   console.log(sql);
   if (err) {
@@ -143,10 +127,13 @@ function bwTransformation(req,res,next) {
 function insertImageDB(req,res,next) {
     console.log("====================== DATABASE INSERT ======================");
     res.send(req.files);
-    sql = 'INSERT INTO images (name, email, url, bwurl) VALUES ?';
+    sql = 'INSERT INTO images (email, phone, url, bwurl, status, receipt) VALUES ?';
     var url = 'https://' + S3_BUCKET_NAME + '.s3.amazonaws.com/' + fileName;
     var bwurl = 'https://post-' + S3_BUCKET_NAME + '.s3.amazonaws.com/' + 'bw_' + fileName;
-    var values = [[req.body.name, req.body.email, url , bwurl]];
+    //hardcode status and receipt (filename, which is a random unique string)
+    var status = 1;
+    var receipt = fileName.split(".")[0];
+    var values = [[req.body.email, req.body.phone, url , bwurl, status, receipt]];
     dbConnection.query(sql, [values], function (err, result) {
       console.log(sql);
       console.dir(values);
@@ -181,9 +168,9 @@ app.use(function(req, res, next) {
 
 /* 
   Involved middlewares: (main server logic)
-  1. upload.single("image") => saves image and uploads it to S3 bucket
+  1. upload.single("image") => saves image locally
   2. bwTransformation => transforms image to black and white, and uploads
-     it to the post-S3 bucket
+     it to the post-S3 bucket and the raw image to the s3 bucket
   3. insertImageDB => records transaction in DB, removes files from /images  
      and sends "SELECT * FROM images" result to frontend
 */

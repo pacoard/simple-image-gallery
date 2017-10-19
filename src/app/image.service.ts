@@ -26,7 +26,7 @@ export class ImageService {
       for (var i = 0; i< data.length; i++) {
         images[i] = {
           id: data[i].id, 
-          name: data[i].name, 
+          phone: data[i].phone, 
           email: data[i].email,
           path: data[i].url,
           bwpath: data[i].bwurl,

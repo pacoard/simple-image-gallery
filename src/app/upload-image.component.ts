@@ -13,8 +13,8 @@ export class UploadImageComponent {
 	componentName = 'UploadImageComponent';
 	//handle form
 	model = {
-		name: 'Arturo',
-		email: 'arthurtheking@king.arthur.com'
+		email: 'arthurtheking@king.arthur.com',
+		phone: '+1 (777) 777-7777'
 	};
     submited = false;
     error = false;
@@ -36,8 +36,8 @@ export class UploadImageComponent {
             /*for(var i = 0; i < files.length; i++) {
                 formData.append("images", files[i], files[i].name);
             }*/
-            formData.append('name', this.model['name']);
             formData.append('email', this.model['email']);
+            formData.append('phone', this.model['phone']);
             formData.append("image", files[0], files[0].name);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
