@@ -19,10 +19,17 @@ var LOCAL_IMAGES_PATH = 'images/';
 var s3 = new aws.S3();
 
 // Enviroment variables for DB and S3
-var S3_BUCKET_NAME = process.env.S3_BUCKET;
+/*var S3_BUCKET_NAME = process.env.S3_BUCKET;
 var DB_HOST = process.env.RDS_HOST; 
 var DB_USERNAME = process.env.RDS_USERNAME
 var DB_PASSWORD = process.env.RDS_PASSWORD;
+*/
+
+//sed -i 's/"t_VALUE"/\"actual_value\"/g' server.js
+var S3_BUCKET_NAME = t_S3_BUCKET_NAME;
+var DB_HOST = t_DB_HOST;
+var DB_USERNAME = t_DB_USERNAME;
+var DB_PASSWORD = t_DB_PASSWORD;
 
 /* //For local testing
 var S3_BUCKET_NAME = 'sample bucket';
@@ -30,6 +37,7 @@ var DB_HOST = 'sample host';
 var DB_USERNAME = 'paco';
 var DB_PASSWORD = 'sample pass';
 */
+
 var DB_PORT = '8000';
 var DB_NAME = 'imagesdb'; 
 ///////////////////////
